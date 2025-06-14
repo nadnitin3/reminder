@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reminder App</title>
+
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #eef2f5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #logoutBtn {
+      float: right;
+      background-color: #dc3545;
+      margin-top: -20px;
+      margin-bottom: 20px;
+    }
+
+    #logoutBtn:hover {
+      background-color: #c82333;
+    }
+
+    #search {
+      padding: 10px;
+      margin: 20px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+      th, td {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>📅 Reminder App</h2>
+
+    <div id="loginForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" />
+
+      <button onclick="login()">Login</button>
+    </div>
+
+    <button id="logoutBtn" style="display:none;" onclick="logout()">Logout</button>
+
+    <form id="reminderForm" style="display:none;">
+      <label for="title">Reminder Title</label>
+      <input type="text" id="title" required />
+
+      <label for="reminderDate">Reminder Date</label>
+      <input type="date" id="reminderDate" required />
+
+      <label for="dueDate">Due Date</label>
+      <input type="date" id="dueDate" required />
+
+      <label for="mailTo">Mail To</label>
+      <input type="text" id="mailTo" required />
+
+      <label for="mailCc">Mail CC</label>
+      <input type="text" id="mailCc" />
+
+      <label for="details">Reminder Details</label>
+      <textarea id="details" rows="4" required></textarea>
+
+      <button type="button" onclick="saveReminder()">Save Reminder</button>
+    </form>
+
+    <input type="text" id="search" placeholder="Search Reminders..." onkeyup="searchReminders()" style="display:none;" />
+
+    <div id="reminderTableSection" class="table-responsive" style="display:none;">
+      <table id="reminderTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Reminder</th>
+            <th>Due</th>
+            <th>To</th>
+            <th>CC</th>
+            <th>Details</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reminderList"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
